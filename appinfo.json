@@ -29,6 +29,11 @@
                 "file": "fonts/UbuntuMono-Regular.ttf",
                 "name": "MONO_FONT_14",
                 "type": "font"
+            },
+            {
+                "file": "images/bus.png",
+                "name": "IMAGES_BUS_PNG",
+                "type": "png"
             }
         ]
     },
