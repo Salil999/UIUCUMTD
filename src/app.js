@@ -14,16 +14,16 @@ var key = '79279d634cac41da9258b1875237c75a';
 
 var main = new UI.Card({
     title: ' UIUCUMTD',
-    icon: 'bus_icon.png',
-    body: 'Replace this with bod'
+    icon: 'images/bus.png',
+    body: 'Welcome to the UIUC bus app!\n\nShashank Saxena',
+    //subtitle: 'Shashank Saxena'
 });
 
 main.show();
 
 main.on('click', 'select', function(e) {
 
-    var menu = new UI.Menu({
-    });
+    var menu = new UI.Menu({});
 
     /*
       var textfield = new UI.Text({
@@ -46,27 +46,23 @@ main.on('click', 'select', function(e) {
             //data = JSON.stringify(data);
             //console.log(menu);
             var section = {
-                title: 'Bus Stops Near You',
+                title: '    Bus Stops Near You',
                 items: [{
                     title: 'Title 1',
-                  subtitle: 'Minutes'
-                },
-                        {
+                    subtitle: 'Minutes'
+                }, {
                     title: 'Title 2',
-                  subtitle: 'Minutes'
-                },
-                        {
-                          title: 'Title 3',
-                          subtitle: 'Minutes'
-                       },
-                       {
-                         title: 'Title 4',
-                         subtitle: 'Minutes'
-                       },
-                       {
-                         title: 'Title 5',
-                         subtitle: 'Minutes'
-                       }]
+                    subtitle: 'Minutes'
+                }, {
+                    title: 'Title 3',
+                    subtitle: 'Minutes'
+                }, {
+                    title: 'Title 4',
+                    subtitle: 'Minutes'
+                }, {
+                    title: 'Title 5',
+                    subtitle: 'Minutes'
+                }]
             };
             menu.section(0, section);
             menu.show();
