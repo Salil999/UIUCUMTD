@@ -1,84 +1,82 @@
-/**
- * Welcome to Pebble.js!
- *
- * This is where you write your app.
- */
-
+var tempURL = 'https://developer.cumtd.com/api/v2.2/json/GetStopsByLatLon?key=79279d634cac41da9258b1875237c75a&lat=40.1128153&lon=-88.2289994&count=5';
+//Get stops based on location
 
 var UI = require('ui');
-//var Vector2 = require('vector2');
 var ajax = require('ajax');
 
-var baseURL = 'https://developer.cumtd.com/api/v2.2/json/GetDeparturesByStop?';
-var key = '79279d634cac41da9258b1875237c75a';
+var stopIDs = [];
+
+//var baseURL = 'https://developer.cumtd.com/api/v2.2/json/GetDeparturesByStop?';
+//var key = '79279d634cac41da9258b1875237c75a';
+
+var stopsNearYou = new UI.Menu({}); // Menu for showing all the stops near your current location
+var stopTimings = new UI.Menu({}); // Menu for the timings of the selected stop
+
+var stopsNearYouList = {
+// List of stops near you, part of stopsNearYou
+    title: 'Bus Stops Near You',
+    items: [{
+        title: 'ERROR',
+        //subtitle: 'ERROR'
+    }, {
+        title: 'ERROR',
+        //subtitle: 'ERROR'
+    }, {
+        title: 'ERROR',
+        //subtitle: 'ERROR'
+    }, {
+        title: 'ERROR',
+        //subtitle: 'ERROR'
+    }, {
+        title: 'ERROR',
+        //subtitle: 'ERROR'
+    }]
+};
 
 var main = new UI.Card({
     title: ' UIUCUMTD',
     icon: 'images/bus.png',
     body: 'Welcome to the UIUC bus app!\n\nShashank Saxena',
-    //subtitle: 'Shashank Saxena'
+    scrollable: false,
 });
 
 main.show();
 
 main.on('click', 'select', function(e) {
 
-    var menu = new UI.Menu({});
+    stopsNearYou.on('select', function(e) {
+        var stopName = e.item.title;
+        console.log(stopName);
+    });
 
-    /*
-      var textfield = new UI.Text({
-          position: new Vector2(0, 65),
-          size: new Vector2(144, 30),
-          font: 'gothic-24-bold',
-          text: 'Text Anywhere!',
-          textAlign: 'center'
-      });
-     Change using 'textfield.objectProperty(newValue);'
-     EX 'textfield.text('Hello!');
-    */
     ajax({
-            url: baseURL + 'key=' + key + '&stop_id=' + 'iu' + '&count=' + '5',
+            //url: baseURL + 'key=' + key + '&stop_id=' + 'iu' + '&count=' + '5',
+            url: tempURL,
             type: 'json',
             method: 'get',
             async: false
         },
         function(data) {
-            //data = JSON.stringify(data);
-            //console.log(menu);
-            var section = {
-                title: '    Bus Stops Near You',
-                items: [{
-                    title: 'Title 1',
-                    subtitle: 'Minutes'
-                }, {
-                    title: 'Title 2',
-                    subtitle: 'Minutes'
-                }, {
-                    title: 'Title 3',
-                    subtitle: 'Minutes'
-                }, {
-                    title: 'Title 4',
-                    subtitle: 'Minutes'
-                }, {
-                    title: 'Title 5',
-                    subtitle: 'Minutes'
-                }]
-            };
-            menu.section(0, section);
-            menu.show();
+            if (data) {
+                data = JSON.parse(JSON.stringify(data));
+                //console.log(data);
+                for (var i = 0; i < 5; i++) {
+                    stopIDs.push(data.stops[i].stop_id);
+                    stopsNearYouList.items[i].title = data.stops[i].stop_name;
+                }
+                stopsNearYou.section(0, stopsNearYouList);
+                //console.log(section.items[0].title);
+                console.log(stopIDs);
+                stopsNearYou.show();
+            }
         },
         function(err, stat, req) {
             console.log('ERROR - ' + err);
         }
     );
-
-    var window = new UI.Window({
-        fullscreen: true,
-    });
-
-    window.show();
-
 });
+
+
 /*
 main.on('click', 'up', function(e) {
     var menu = new UI.Menu({
