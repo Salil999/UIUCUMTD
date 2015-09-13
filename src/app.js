@@ -1,19 +1,19 @@
 var tempURL = 'https://developer.cumtd.com/api/v2.2/json/GetStopsByLatLon?key=79279d634cac41da9258b1875237c75a&lat=40.1128153&lon=-88.2289994&count=5';
-//Get stops based on location
+// Get stops based on location
 
 var UI = require('ui');
 var ajax = require('ajax');
 
 var stopIDs = [];
 
-//var baseURL = 'https://developer.cumtd.com/api/v2.2/json/GetDeparturesByStop?';
-//var key = '79279d634cac41da9258b1875237c75a';
+var baseURL = 'https://developer.cumtd.com/api/v2.2/json/GetDeparturesByStop?';
+var key = '79279d634cac41da9258b1875237c75a';
 
 var stopsNearYou = new UI.Menu({}); // Menu for showing all the stops near your current location
 var stopTimings = new UI.Menu({}); // Menu for the timings of the selected stop
 
-var stopsNearYouList = {
-// List of stops near you, part of stopsNearYou
+var menuList = {
+    // List of stops near you, part of stopsNearYou
     title: 'Bus Stops Near You',
     items: [{
         title: 'ERROR',
@@ -45,6 +45,49 @@ main.show();
 main.on('click', 'select', function(e) {
 
     stopsNearYou.on('select', function(e) {
+        ajax({
+                url: baseURL + 'key=' + key + '&stop_id=' + stopIDs[e.itemIndex],
+                type: 'json',
+                method: 'get',
+                async: false
+            },
+            function(data) {
+                if (data) {
+
+                    menuList = {
+                        // Update the SAME menu object to have the timings of the chosen stop
+                        title: e.item.title,
+                        items: [{
+                            title: data.departures[0].headsign,
+                            subtitle: data.departures[0].expected_mins + ' Minute(s)'
+                        }, {
+                            title: data.departures[1].headsign,
+                            subtitle: data.departures[1].expected_mins + ' Minute(s)'
+                        }, {
+                            title: data.departures[2].headsign,
+                            subtitle: data.departures[2].expected_mins + ' Minute(s)'
+                        }, {
+                            title: data.departures[3].headsign,
+                            subtitle: data.departures[3].expected_mins + ' Minute(s)'
+                        }, {
+                            title: data.departures[4].headsign,
+                            subtitle: data.departures[4].expected_mins + ' Minute(s)'
+                        }]
+                    };
+                  
+                    data = JSON.parse(JSON.stringify(data));
+                    console.log(data);
+                    stopTimings.section(0, menuList);
+                    stopTimings.show();
+
+                }
+            },
+            function(err, stat, req) {
+                console.log('ERROR - ' + err);
+            }
+        );
+
+        console.log(e.itemIndex);
         var stopName = e.item.title;
         console.log(stopName);
     });
@@ -62,9 +105,9 @@ main.on('click', 'select', function(e) {
                 //console.log(data);
                 for (var i = 0; i < 5; i++) {
                     stopIDs.push(data.stops[i].stop_id);
-                    stopsNearYouList.items[i].title = data.stops[i].stop_name;
+                    menuList.items[i].title = data.stops[i].stop_name;
                 }
-                stopsNearYou.section(0, stopsNearYouList);
+                stopsNearYou.section(0, menuList);
                 //console.log(section.items[0].title);
                 console.log(stopIDs);
                 stopsNearYou.show();
@@ -75,38 +118,3 @@ main.on('click', 'select', function(e) {
         }
     );
 });
-
-
-/*
-main.on('click', 'up', function(e) {
-    var menu = new UI.Menu({
-        sections: [{
-            items: [{
-                title: 'First Item',
-                icon: 'images/menu_icon.png',
-                subtitle: 'Subtitle Text'
-            }, {
-                title: 'Second Item',
-                subtitle: 'Subtitle Text'
-            }, {
-                title: 'Third Item',
-                subtitle: 'Subtitle Text'
-            }]
-        }]
-    });
-
-    menu.on('select', function(e) {
-        console.log('Selected item #' + e.itemIndex + ' of section #' + e.sectionIndex);
-        console.log('The item is titled "' + e.item.title + '"');
-    });
-    menu.show();
-});
-
-main.on('click', 'down', function(e) {
-    var card = new UI.Card();
-    card.title('A Card');
-    card.subtitle('Is a Window');
-    card.body('The simplest window type in Pebble.js.');
-    card.show();
-});
-*/
