@@ -44,6 +44,11 @@ main.show();
 
 main.on('click', 'select', function(e) {
 
+  if(stopIDs)
+    {
+      stopIDs = [];
+    }
+  
     stopsNearYou.on('select', function(e) {
         ajax({
                 url: baseURL + 'key=' + key + '&stop_id=' + stopIDs[e.itemIndex],
@@ -53,7 +58,9 @@ main.on('click', 'select', function(e) {
             },
             function(data) {
                 if (data) {
-
+                    data = JSON.parse(JSON.stringify(data));
+                    console.log(stopIDs[e.itemIndex]);
+                  if(data) {
                     menuList = {
                         // Update the SAME menu object to have the timings of the chosen stop
                         title: e.item.title,
@@ -74,9 +81,8 @@ main.on('click', 'select', function(e) {
                             subtitle: data.departures[4].expected_mins + ' Minute(s)'
                         }]
                     };
+                  }
                   
-                    data = JSON.parse(JSON.stringify(data));
-                    console.log(data);
                     stopTimings.section(0, menuList);
                     stopTimings.show();
 
@@ -102,11 +108,11 @@ main.on('click', 'select', function(e) {
         function(data) {
             if (data) {
                 data = JSON.parse(JSON.stringify(data));
-                //console.log(data);
                 for (var i = 0; i < 5; i++) {
                     stopIDs.push(data.stops[i].stop_id);
                     menuList.items[i].title = data.stops[i].stop_name;
                 }
+                stopIDs = stopIDs.slice(0,5);
                 stopsNearYou.section(0, menuList);
                 //console.log(section.items[0].title);
                 console.log(stopIDs);
