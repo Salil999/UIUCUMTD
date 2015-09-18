@@ -1,8 +1,7 @@
 {
     "appKeys": {},
     "capabilities": [
-        "location",
-        "configurable"
+        "location"
     ],
     "companyName": "Shashank Saxena",
     "longName": "UIUCUMTD - Check bus schedule on the UIUC campus!",
