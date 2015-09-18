@@ -71,13 +71,13 @@ main.on('click', 'select', function(e) {
                             }, {
                                 title: data.departures[1].headsign,
                                 subtitle: data.departures[1].expected_mins + ' Minute(s)'
-                            }, {
+                            }, /*{
                                 title: data.departures[2].headsign,
                                 subtitle: data.departures[2].expected_mins + ' Minute(s)'
                             }, {
                                 title: data.departures[3].headsign,
                                 subtitle: data.departures[3].expected_mins + ' Minute(s)'
-                            }, /*{
+                            }, {
                                 title: data.departures[4].headsign,
                                 subtitle: data.departures[4].expected_mins + ' Minute(s)'*/
                             ]
