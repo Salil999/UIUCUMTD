@@ -38,6 +38,10 @@
     },
     "sdkVersion": "3",
     "shortName": "UIUCUMTD",
+    "targetPlatforms": [
+        "aplite",
+        "basalt"
+    ],
     "uuid": "bd54318d-9f0a-4537-9c63-3343d59ddf46",
     "versionCode": 1,
     "versionLabel": "1.0",
