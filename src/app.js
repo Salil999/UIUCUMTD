@@ -1,34 +1,12 @@
 var UI = require('ui');
 var ajax = require('ajax');
-var lat;
-var lon;
+//var lat;
+//var lon;
 var arrayLength;
-var locationOptions = {
-    enableHighAccuracy: true,
-    maximumAge: 10000,
-    timeout: 10000
-};
-
-function locationSuccess(pos) {
-    lat = pos.coords.latitude;
-    lon = pos.coords.longitude;
-}
-
-function locationError(err) {
-    console.log('location error (' + err.code + '): ' + err.message);
-}
-
-function getLocation() {
-    navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locationOptions);
-}
-
-var getStopURL = 'https://developer.cumtd.com/api/v2.2/json/GetDeparturesByStop?';
-var key = '79279d634cac41da9258b1875237c75a';
-
 var stopIDs = [];
 var stopsNearYou = new UI.Menu({});
 var stopTimings = new UI.Menu({});
-
+//var key = '79279d634cac41da9258b1875237c75a';
 var timeOfBuses = {
     title: 'test',
     items: [{
@@ -43,17 +21,17 @@ var timeOfBuses = {
 var menuList = {
     title: 'Bus Stops Near You',
     items: [{
-        title: 'ERROR',
+        title: '',
     }, {
-        title: 'ERROR',
+        title: '',
     }, {
-        title: 'ERROR',
+        title: '',
     }, {
-        title: 'ERROR',
+        title: '',
     }, {
-        title: 'ERROR',
+        title: '',
     }, {
-        title: 'ERROR'
+        title: ''
     }]
 };
 
@@ -63,40 +41,49 @@ var main = new UI.Card({
     body: 'Welcome to the UIUC bus app!\n\nShashank Saxena',
     scrollable: false,
 });
+
 var emptyArrayCard = new UI.Card({
   title: '     No Buses',
   subtitle: '\n    No buses within 30 mins',
   scrollable: false
 });
 
+function locationSuccess(pos) {
+    lat = pos.coords.latitude;
+    lon = pos.coords.longitude;
+}
+
+function locationError(err) {
+    console.log('location error (' + err.code + '): ' + err.message);
+}
+
 main.show();
 
+navigator.geolocation.getCurrentPosition(locationSuccess, locationError, {enableHighAccuracy: true,maximumAge: 10000,timeout: 10000});
+
 main.on('click', 'select', function(e) {
-    getLocation();
-    var getGeoLocationURL = 'https://developer.cumtd.com/api/v2.2/json/GetStopsByLatLon?key=' + key + '&lat=' + lat + '&lon=' + lon + '&count=6';
+    navigator.geolocation.getCurrentPosition(locationSuccess, locationError, {enableHighAccuracy: true,maximumAge: 10000,timeout: 10000});
+    //var getGeoLocationURL = 'https://developer.cumtd.com/api/v2.2/json/GetStopsByLatLon?key=' + key + '&lat=40.108578&lon=-88.228777&count=6';
+    var getGeoLocationURL = 'https://developer.cumtd.com/api/v2.2/json/GetStopsByLatLon?key=79279d634cac41da9258b1875237c75a&lat=' + lat + '&lon=' + lon + '&count=6';
     // lat=40.108578
     // lon=-88.228777
     // This points to Transit Plaza
     if (stopIDs) {
         stopIDs = [];
     }
-
     ajax({
-            //url: baseURL + 'key=' + key + '&stop_id=' + 'iu' + '&count=' + '5',
             url: getGeoLocationURL,
             type: 'json',
             method: 'get',
-            async: false
+            async: true
         },
         function(data) {
             if (data) {
                 data = JSON.parse(JSON.stringify(data)); // JSON validator
-
                 for (var i = 0; i < 6; i++) {
                     stopIDs.push(data.stops[i].stop_id);
                     menuList.items[i].title = data.stops[i].stop_name;
                 }
-
                 stopIDs = stopIDs.splice('');
                 stopIDs = stopIDs.slice(0, 6);
                 stopsNearYou.section(0, menuList);
@@ -110,14 +97,12 @@ main.on('click', 'select', function(e) {
 
     stopsNearYou.on('select', function(e) {
         ajax({
-                url: getStopURL + 'key=' + key + '&stop_id=' + stopIDs[e.itemIndex],
+                url: 'https://developer.cumtd.com/api/v2.2/json/GetDeparturesByStop?key=79279d634cac41da9258b1875237c75a&stop_id=' + stopIDs[e.itemIndex],
                 type: 'json',
                 method: 'get',
-                async: false
+                async: true
             },
             function(data) {
-                console.log(getStopURL + 'key=' + key + '&stop_id=' + stopIDs[e.itemIndex]);
-
                 if (data) {
                     data = JSON.parse(JSON.stringify(data)); //JSON Validator
                     arrayLength = data.departures.length;
@@ -325,18 +310,14 @@ main.on('click', 'select', function(e) {
                 }
                 if (arrayLength > 0) {
                     timeOfBuses = JSON.parse(JSON.stringify(timeOfBuses));
-
-
                     stopTimings.section(0, timeOfBuses);
                     stopTimings.show();
                     timeOfBuses = {};
                 }
-
             },
             function(err, stat, req) {
                 console.log('ERROR - stopsNearYou.on - ' + err);
             }
         );
     });
-
 });

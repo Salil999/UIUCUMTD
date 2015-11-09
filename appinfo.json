@@ -4,7 +4,7 @@
         "location"
     ],
     "companyName": "Shashank Saxena",
-    "longName": "UIUCUMTD - Check bus schedule on the UIUC campus!",
+    "longName": "UIUCUMTD - CUMTD Bus Schedule",
     "projectType": "pebblejs",
     "resources": {
         "media": [
@@ -44,7 +44,7 @@
     ],
     "uuid": "bd54318d-9f0a-4537-9c63-3343d59ddf46",
     "versionCode": 1,
-    "versionLabel": "1.0",
+    "versionLabel": "1.2",
     "watchapp": {
         "hiddenApp": false,
         "watchface": false
