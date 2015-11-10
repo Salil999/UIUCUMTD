@@ -1,6 +1,6 @@
 # UIUCUMTD
 Bus app for the Pebble smartwatch. Made by a UIUC student for UIUC students.
-
+![UIUC LOGO](https://raw.githubusercontent.com/Salil999/UIUCUMTD/master/uiuc.jpg "UIUC")
 
 
 # Technical Details
