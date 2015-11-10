@@ -6,6 +6,7 @@ var arrayLength;
 var stopIDs = [];
 var stopsNearYou = new UI.Menu({});
 var stopTimings = new UI.Menu({});
+var noBus;
 //var key = '79279d634cac41da9258b1875237c75a';
 var timeOfBuses = {
     title: 'test',
@@ -43,9 +44,9 @@ var main = new UI.Card({
 });
 
 var emptyArrayCard = new UI.Card({
-  title: '     No Buses',
-  subtitle: '\n    No buses within 30 mins',
-  scrollable: false
+    title: '     No Buses',
+    subtitle: '\n    No buses within 30 mins',
+    scrollable: false
 });
 
 function locationSuccess(pos) {
@@ -59,12 +60,31 @@ function locationError(err) {
 
 main.show();
 
-navigator.geolocation.getCurrentPosition(locationSuccess, locationError, {enableHighAccuracy: true,maximumAge: 10000,timeout: 10000});
+navigator.geolocation.getCurrentPosition(locationSuccess, locationError, {
+    enableHighAccuracy: true,
+    maximumAge: 10000,
+    timeout: 10000
+});
 
 main.on('click', 'select', function(e) {
-    navigator.geolocation.getCurrentPosition(locationSuccess, locationError, {enableHighAccuracy: true,maximumAge: 10000,timeout: 10000});
-    //var getGeoLocationURL = 'https://developer.cumtd.com/api/v2.2/json/GetStopsByLatLon?key=' + key + '&lat=40.108578&lon=-88.228777&count=6';
-    var getGeoLocationURL = 'https://developer.cumtd.com/api/v2.2/json/GetStopsByLatLon?key=79279d634cac41da9258b1875237c75a&lat=' + lat + '&lon=' + lon + '&count=6';
+    for (var i = 0; i < 6; i++) {
+        menuList.items[i].title = 'Loading';
+    }
+    stopsNearYou.section(0, menuList);
+    stopsNearYou.show();
+    navigator.geolocation.getCurrentPosition(locationSuccess, locationError, {
+        enableHighAccuracy: true,
+        maximumAge: 10000,
+        timeout: 10000
+    });
+    navigator.geolocation.getCurrentPosition(locationSuccess, locationError, {
+        enableHighAccuracy: true,
+        maximumAge: 10000,
+        timeout: 10000
+    });
+
+    var getGeoLocationURL = 'https://developer.cumtd.com/api/v2.2/json/GetStopsByLatLon?key=79279d634cac41da9258b1875237c75a&lat=40.108578&lon=-88.228777&count=6';
+    //var getGeoLocationURL = 'https://developer.cumtd.com/api/v2.2/json/GetStopsByLatLon?key=79279d634cac41da9258b1875237c75a&lat=' + lat + '&lon=' + lon + '&count=6';
     // lat=40.108578
     // lon=-88.228777
     // This points to Transit Plaza
@@ -96,6 +116,17 @@ main.on('click', 'select', function(e) {
     );
 
     stopsNearYou.on('select', function(e) {
+        if (noBus === false) {
+            timeOfBuses = {
+                title: 'Loading',
+                items: [{
+                    title: 'Loading',
+                    subtitle: 'Fetching Data...'
+                }]
+            };
+            stopTimings.section(0, timeOfBuses);
+            stopTimings.show();
+        }
         ajax({
                 url: 'https://developer.cumtd.com/api/v2.2/json/GetDeparturesByStop?key=79279d634cac41da9258b1875237c75a&stop_id=' + stopIDs[e.itemIndex],
                 type: 'json',
@@ -110,6 +141,7 @@ main.on('click', 'select', function(e) {
                     switch (arrayLength) {
                         case 0:
                             emptyArrayCard.show();
+                            noBus = true;
                             break;
 
                         case 1:
@@ -312,12 +344,22 @@ main.on('click', 'select', function(e) {
                     timeOfBuses = JSON.parse(JSON.stringify(timeOfBuses));
                     stopTimings.section(0, timeOfBuses);
                     stopTimings.show();
-                    timeOfBuses = {};
+                    timeOfBuses = {
+                        title: 'test',
+                        items: [{
+                            title: '',
+                            subtitle: ''
+                        }, {
+                            title: '',
+                            subtitle: ''
+                        }]
+                    };
                 }
             },
             function(err, stat, req) {
                 console.log('ERROR - stopsNearYou.on - ' + err);
             }
         );
+
     });
 });
