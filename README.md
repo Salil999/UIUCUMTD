@@ -9,4 +9,5 @@ Used CloudPebble IDE to develop the app entirely in JavaScript. In the src folde
 + app.js
 
 The readable code is in app.js, but the actual app on te phone (and the app on the Pebble store) is min.js
+
 I submitted min.js because it's a smaller file (hence min -> minified)
