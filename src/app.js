@@ -2,6 +2,8 @@ var UI = require('ui');
 var ajax = require('ajax');
 //var lat;
 //var lon;
+//var zero, one, two, three, four, five, six, seven;
+var zero;
 var arrayLength;
 var stopIDs = [];
 var stopsNearYou = new UI.Menu({});
@@ -120,7 +122,7 @@ main.on('click', 'select', function(e) {
             timeOfBuses = {
                 title: 'Loading',
                 items: [{
-                    title: 'Loading',
+                    title: 'Loading...',
                     subtitle: 'Fetching Data...'
                 }]
             };
@@ -140,6 +142,7 @@ main.on('click', 'select', function(e) {
                     timeOfBuses.title = e.item.title;
                     switch (arrayLength) {
                         case 0:
+                            zero = -1;
                             emptyArrayCard.show();
                             noBus = true;
                             break;
@@ -149,9 +152,10 @@ main.on('click', 'select', function(e) {
                                 title: e.item.title,
                                 items: [{
                                     title: data.departures[0].headsign,
-                                    subtitle: data.departures[0].expected_mins + ' Minute(s)'
+                                    subtitle: zero + ' Minute(s)'
                                 }]
                             };
+                            zero = data.departures[e.itemIndex].expected_mins;
                             break;
 
                         case 2:
@@ -165,6 +169,7 @@ main.on('click', 'select', function(e) {
                                     subtitle: data.departures[1].expected_mins + ' Minute(s)'
                                 }]
                             };
+                            zero = data.departures[e.itemIndex].expected_mins;
                             break;
 
                         case 3:
@@ -181,6 +186,7 @@ main.on('click', 'select', function(e) {
                                     subtitle: data.departures[2].expected_mins + ' Minute(s)'
                                 }]
                             };
+                            zero = data.departures[e.itemIndex].expected_mins;
                             break;
 
                         case 4:
@@ -200,6 +206,7 @@ main.on('click', 'select', function(e) {
                                     subtitle: data.departures[3].expected_mins + ' Minute(s)'
                                 }]
                             };
+                            zero = data.departures[e.itemIndex].expected_mins;
                             break;
 
                         case 5:
@@ -222,6 +229,7 @@ main.on('click', 'select', function(e) {
                                     subtitle: data.departures[4].expected_mins + ' Minute(s)'
                                 }]
                             };
+                            zero = data.departures[e.itemIndex].expected_mins;
                             break;
 
                         case 6:
@@ -247,6 +255,7 @@ main.on('click', 'select', function(e) {
                                     subtitle: data.departures[5].expected_mins + ' Minute(s)'
                                 }]
                             };
+                            zero = data.departures[e.itemIndex].expected_mins;
                             break;
 
                         case 7:
@@ -275,6 +284,7 @@ main.on('click', 'select', function(e) {
                                     subtitle: data.departures[6].expected_mins + ' Minute(s)'
                                 }]
                             };
+                            zero = data.departures[e.itemIndex].expected_mins;
                             break;
 
                         case 8:
@@ -306,6 +316,7 @@ main.on('click', 'select', function(e) {
                                     subtitle: data.departures[7].expected_mins + ' Minute(s)'
                                 }]
                             };
+                            zero = data.departures[e.itemIndex].expected_mins;
                             break;
 
                         default:
@@ -337,6 +348,7 @@ main.on('click', 'select', function(e) {
                                     subtitle: data.departures[7].expected_mins + ' Minute(s)'
                                 }]
                             };
+                            zero = data.departures[e.itemIndex].expected_mins;
                             break;
                     }
                 }
@@ -360,6 +372,26 @@ main.on('click', 'select', function(e) {
                 console.log('ERROR - stopsNearYou.on - ' + err);
             }
         );
-
+        // Timer Code
+/*
+        stopTimings.on('select', function(e) {
+            console.log('e.itemIndex = ' + e.itemIndex);
+            if (zero > 3) {
+                var timerCard = new UI.Card({
+                    title: '        Timer',
+                    subtitle: ' Reminder set\n       ' + zero + ' mins',
+                    scrollable: false
+                });
+                timerCard.show();
+            } else {
+                var noTimer = new UI.Card({
+                    title: '        Timer',
+                    subtitle: 'Coming in less than 3 minutes',
+                    scrollable: false
+                });
+                noTimer.show();
+            }
+        });
+*/
     });
 });
