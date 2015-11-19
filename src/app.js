@@ -1,9 +1,5 @@
 var UI = require('ui');
 var ajax = require('ajax');
-//var lat;
-//var lon;
-//var zero, one, two, three, four, five, six, seven;
-var zero;
 var arrayLength;
 var stopIDs = [];
 var stopsNearYou = new UI.Menu({});
@@ -60,13 +56,13 @@ function locationError(err) {
     console.log('location error (' + err.code + '): ' + err.message);
 }
 
-main.show();
-
 navigator.geolocation.getCurrentPosition(locationSuccess, locationError, {
     enableHighAccuracy: true,
     maximumAge: 10000,
     timeout: 10000
 });
+
+main.show();
 
 main.on('click', 'select', function(e) {
     for (var i = 0; i < 6; i++) {
@@ -79,17 +75,7 @@ main.on('click', 'select', function(e) {
         maximumAge: 10000,
         timeout: 10000
     });
-    navigator.geolocation.getCurrentPosition(locationSuccess, locationError, {
-        enableHighAccuracy: true,
-        maximumAge: 10000,
-        timeout: 10000
-    });
-
-    var getGeoLocationURL = 'https://developer.cumtd.com/api/v2.2/json/GetStopsByLatLon?key=79279d634cac41da9258b1875237c75a&lat=40.108578&lon=-88.228777&count=6';
-    //var getGeoLocationURL = 'https://developer.cumtd.com/api/v2.2/json/GetStopsByLatLon?key=79279d634cac41da9258b1875237c75a&lat=' + lat + '&lon=' + lon + '&count=6';
-    // lat=40.108578
-    // lon=-88.228777
-    // This points to Transit Plaza
+    var getGeoLocationURL = 'https://developer.cumtd.com/api/v2.2/json/GetStopsByLatLon?key=79279d634cac41da9258b1875237c75a&lat=' + lat + '&lon=' + lon + '&count=6';
     if (stopIDs) {
         stopIDs = [];
     }
@@ -113,7 +99,7 @@ main.on('click', 'select', function(e) {
             }
         },
         function(err, stat, req) {
-            console.log('ERROR - main.on - ' + err);
+            console.log('ERROR - main.on - \n' + JSON.stringify(err));
         }
     );
 
@@ -142,7 +128,6 @@ main.on('click', 'select', function(e) {
                     timeOfBuses.title = e.item.title;
                     switch (arrayLength) {
                         case 0:
-                            zero = -1;
                             emptyArrayCard.show();
                             noBus = true;
                             break;
@@ -152,10 +137,8 @@ main.on('click', 'select', function(e) {
                                 title: e.item.title,
                                 items: [{
                                     title: data.departures[0].headsign,
-                                    subtitle: zero + ' Minute(s)'
                                 }]
                             };
-                            zero = data.departures[e.itemIndex].expected_mins;
                             break;
 
                         case 2:
@@ -169,7 +152,6 @@ main.on('click', 'select', function(e) {
                                     subtitle: data.departures[1].expected_mins + ' Minute(s)'
                                 }]
                             };
-                            zero = data.departures[e.itemIndex].expected_mins;
                             break;
 
                         case 3:
@@ -186,7 +168,6 @@ main.on('click', 'select', function(e) {
                                     subtitle: data.departures[2].expected_mins + ' Minute(s)'
                                 }]
                             };
-                            zero = data.departures[e.itemIndex].expected_mins;
                             break;
 
                         case 4:
@@ -206,7 +187,6 @@ main.on('click', 'select', function(e) {
                                     subtitle: data.departures[3].expected_mins + ' Minute(s)'
                                 }]
                             };
-                            zero = data.departures[e.itemIndex].expected_mins;
                             break;
 
                         case 5:
@@ -229,7 +209,6 @@ main.on('click', 'select', function(e) {
                                     subtitle: data.departures[4].expected_mins + ' Minute(s)'
                                 }]
                             };
-                            zero = data.departures[e.itemIndex].expected_mins;
                             break;
 
                         case 6:
@@ -255,7 +234,6 @@ main.on('click', 'select', function(e) {
                                     subtitle: data.departures[5].expected_mins + ' Minute(s)'
                                 }]
                             };
-                            zero = data.departures[e.itemIndex].expected_mins;
                             break;
 
                         case 7:
@@ -284,7 +262,6 @@ main.on('click', 'select', function(e) {
                                     subtitle: data.departures[6].expected_mins + ' Minute(s)'
                                 }]
                             };
-                            zero = data.departures[e.itemIndex].expected_mins;
                             break;
 
                         case 8:
@@ -316,7 +293,6 @@ main.on('click', 'select', function(e) {
                                     subtitle: data.departures[7].expected_mins + ' Minute(s)'
                                 }]
                             };
-                            zero = data.departures[e.itemIndex].expected_mins;
                             break;
 
                         default:
@@ -348,7 +324,6 @@ main.on('click', 'select', function(e) {
                                     subtitle: data.departures[7].expected_mins + ' Minute(s)'
                                 }]
                             };
-                            zero = data.departures[e.itemIndex].expected_mins;
                             break;
                     }
                 }
@@ -372,26 +347,5 @@ main.on('click', 'select', function(e) {
                 console.log('ERROR - stopsNearYou.on - ' + err);
             }
         );
-        // Timer Code
-/*
-        stopTimings.on('select', function(e) {
-            console.log('e.itemIndex = ' + e.itemIndex);
-            if (zero > 3) {
-                var timerCard = new UI.Card({
-                    title: '        Timer',
-                    subtitle: ' Reminder set\n       ' + zero + ' mins',
-                    scrollable: false
-                });
-                timerCard.show();
-            } else {
-                var noTimer = new UI.Card({
-                    title: '        Timer',
-                    subtitle: 'Coming in less than 3 minutes',
-                    scrollable: false
-                });
-                noTimer.show();
-            }
-        });
-*/
     });
 });
