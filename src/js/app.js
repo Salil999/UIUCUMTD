@@ -36,10 +36,10 @@ var menuList = {
 
 var main = new UI.Card({
     title: ' UIUCUMTD',
-    icon: 'images/bus.png',
     body: 'Welcome to the UIUC bus app!\n\nShashank Saxena',
     scrollable: false,
 });
+main.icon('vehicle');
 
 var emptyArrayCard = new UI.Card({
     title: '     No Buses',
@@ -63,6 +63,8 @@ navigator.geolocation.getCurrentPosition(locationSuccess, locationError, {
 });
 
 main.show();
+
+//stopsNearYou.show();
 
 main.on('click', 'select', function(e) {
     for (var i = 0; i < 6; i++) {
@@ -331,16 +333,6 @@ main.on('click', 'select', function(e) {
                     timeOfBuses = JSON.parse(JSON.stringify(timeOfBuses));
                     stopTimings.section(0, timeOfBuses);
                     stopTimings.show();
-                    timeOfBuses = {
-                        title: 'test',
-                        items: [{
-                            title: '',
-                            subtitle: ''
-                        }, {
-                            title: '',
-                            subtitle: ''
-                        }]
-                    };
                 }
             },
             function(err, stat, req) {

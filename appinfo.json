@@ -10,18 +10,19 @@
         "media": [
             {
                 "file": "images/menu_icon.png",
+                "menuIcon": true,
                 "name": "IMAGE_MENU_ICON",
-                "type": "png"
+                "type": "bitmap"
             },
             {
                 "file": "images/logo_splash.png",
                 "name": "IMAGE_LOGO_SPLASH",
-                "type": "png"
+                "type": "bitmap"
             },
             {
                 "file": "images/tile_splash.png",
                 "name": "IMAGE_TILE_SPLASH",
-                "type": "png"
+                "type": "bitmap"
             },
             {
                 "file": "fonts/UbuntuMono-Regular.ttf",
@@ -29,9 +30,8 @@
                 "type": "font"
             },
             {
-                "file": "images/bus.png",
-                "menuIcon": true,
-                "name": "IMAGES_BUS_PNG",
+                "file": "images/vehicle.png",
+                "name": "IMAGES_VEHICLE_PNG",
                 "type": "png"
             }
         ]
